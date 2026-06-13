@@ -8,15 +8,6 @@ export interface Frame {
   isTenth: boolean;
 }
 
-export interface GameState {
-  rolls: number[];
-  frames: Frame[];
-  totalScore: number;
-  isGameOver: boolean;
-  currentFrameIndex: number;
-  pinsRemaining: number;
-}
-
 export interface ScoreResponse {
   totalScore: number;
   currentFrame: number;
