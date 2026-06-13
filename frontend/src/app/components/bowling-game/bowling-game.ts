@@ -18,6 +18,8 @@ export class BowlingGameComponent {
   readonly isGameOver = this.scoringService.isGameOver;
   readonly pinsRemaining = this.scoringService.pinsRemaining;
   readonly currentFrameIndex = this.scoringService.currentFrameIndex;
+  readonly isLoading = this.scoringService.isLoading;
+  readonly errorMessage = this.scoringService.errorMessage;
 
   onRoll(pins: number): void {
     this.scoringService.addRoll(pins);
@@ -25,5 +27,9 @@ export class BowlingGameComponent {
 
   onReset(): void {
     this.scoringService.resetGame();
+  }
+
+  onDismissError(): void {
+    this.scoringService.dismissError();
   }
 }

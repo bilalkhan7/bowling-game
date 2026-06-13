@@ -7,9 +7,16 @@
     <div class="game__legend">
       <span class="legend__item legend__item--strike">X = Strike</span>
       <span class="legend__item legend__item--spare">/ = Spare</span>
-      <span class="legend__item">– = Gutter</span>
+      <span class="legend__item legend__item--gutter">– = Gutter</span>
     </div>
   </header>
+
+  @if (errorMessage()) {
+    <div class="game__error" role="alert" aria-live="assertive">
+      <span>{{ errorMessage() }}</span>
+      <button class="game__error-dismiss" (click)="onDismissError()" aria-label="Dismiss error">✕</button>
+    </div>
+  }
 
   <div class="game__scorecard" role="table" aria-label="Bowling scorecard">
     @for (frame of frames(); track $index) {
@@ -34,19 +41,19 @@
           Game over — you scored {{ totalScore() }} points.
         }
       </p>
-      <button class="game__reset-btn" (click)="onReset()">
-        New Game
-      </button>
+      <button class="game__reset-btn" (click)="onReset()">New Game</button>
     </div>
   } @else {
     <div class="game__input-area">
-      <p class="game__frame-indicator">
-        Frame {{ currentFrameIndex() + 1 }} of 10
-      </p>
-      <app-roll-input
-        [pinsRemaining]="pinsRemaining()"
-        (rollSubmitted)="onRoll($event)"
-      />
+      <p class="game__frame-indicator">Frame {{ currentFrameIndex() + 1 }} of 10</p>
+      @if (isLoading()) {
+        <p class="game__loading" role="status" aria-live="polite">Confirming with server…</p>
+      } @else {
+        <app-roll-input
+          [pinsRemaining]="pinsRemaining()"
+          (rollSubmitted)="onRoll($event)"
+        />
+      }
     </div>
   }
 </div>
