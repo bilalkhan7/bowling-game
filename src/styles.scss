@@ -1,1 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --bg:               #0f0f13;
+  --card-bg:          #1a1a24;
+  --frame-active-bg:  #1f2a3a;
+  --border:           #2e2e40;
+  --text-primary:     #f0f0f5;
+  --text-muted:       #7a7a95;
+  --accent:           #4f8ef7;
+  --strike-color:     #f5a623;
+  --spare-color:      #5bc8af;
+  --btn-bg:           #1f1f2e;
+  --btn-hover-bg:     #2a2a3e;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
