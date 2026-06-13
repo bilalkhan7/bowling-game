@@ -1,0 +1,16 @@
+<div class="roll-input" role="group" aria-label="Select pins knocked down">
+  <p class="roll-input__label">Pins knocked down</p>
+  <div class="roll-input__buttons">
+    @for (pins of pinOptions(); track pins) {
+      <button
+        class="roll-input__btn"
+        [class.roll-input__btn--gutter]="pins === 0"
+        [class.roll-input__btn--strike]="pins === 10"
+        (click)="submit(pins)"
+        [attr.aria-label]="pins === 0 ? 'Gutter ball' : pins + ' pins'"
+      >
+        {{ pins === 0 ? '–' : pins }}
+      </button>
+    }
+  </div>
+</div>
