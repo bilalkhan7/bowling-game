@@ -1,0 +1,52 @@
+<div class="game">
+  <header class="game__header">
+    <h1 class="game__title">🎳 Bowling Score Calculator</h1>
+    <p class="game__description">
+      Track your game frame by frame. Select the number of pins knocked down after each roll.
+    </p>
+    <div class="game__legend">
+      <span class="legend__item legend__item--strike">X = Strike</span>
+      <span class="legend__item legend__item--spare">/ = Spare</span>
+      <span class="legend__item">– = Gutter</span>
+    </div>
+  </header>
+
+  <div class="game__scorecard" role="table" aria-label="Bowling scorecard">
+    @for (frame of frames(); track $index) {
+      <app-frame
+        [frame]="frame"
+        [frameIndex]="$index"
+        [isActive]="!isGameOver() && $index === currentFrameIndex()"
+      />
+    }
+  </div>
+
+  <div class="game__total">
+    Total: <span class="game__total-score">{{ totalScore() }}</span>
+  </div>
+
+  @if (isGameOver()) {
+    <div class="game__result" role="status" aria-live="polite">
+      <p class="game__result-text">
+        @if (totalScore() === 300) {
+          Perfect game! 🎳
+        } @else {
+          Game over — you scored {{ totalScore() }} points.
+        }
+      </p>
+      <button class="game__reset-btn" (click)="onReset()">
+        New Game
+      </button>
+    </div>
+  } @else {
+    <div class="game__input-area">
+      <p class="game__frame-indicator">
+        Frame {{ currentFrameIndex() + 1 }} of 10
+      </p>
+      <app-roll-input
+        [pinsRemaining]="pinsRemaining()"
+        (rollSubmitted)="onRoll($event)"
+      />
+    </div>
+  }
+</div>
