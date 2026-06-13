@@ -1,4 +1,4 @@
-import { RollDisplayPipe } from './roll-display-pipe';
+import { RollDisplayPipe } from './roll-display.pipe';
 import { Frame } from '../models/bowling.model';
 
 const frame = (partial: Partial<Frame>): Frame => ({
