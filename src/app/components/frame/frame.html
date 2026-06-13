@@ -1,0 +1,42 @@
+<div
+  class="frame"
+  [class.frame--active]="isActive()"
+  [class.frame--tenth]="frame().isTenth"
+  [attr.aria-label]="'Frame ' + (frameIndex() + 1)"
+>
+  <span class="frame__number">{{ frameIndex() + 1 }}</span>
+
+  <div class="frame__rolls">
+    @if (frame().isTenth) {
+      <span class="frame__roll"
+        [class.frame__roll--strike]="(frame() | rollDisplay:0) === 'X'">
+        {{ frame() | rollDisplay:0 }}
+      </span>
+      <span class="frame__roll"
+        [class.frame__roll--strike]="(frame() | rollDisplay:1) === 'X'"
+        [class.frame__roll--spare]="(frame() | rollDisplay:1) === '/'">
+        {{ frame() | rollDisplay:1 }}
+      </span>
+      <span class="frame__roll frame__roll--bonus"
+        [class.frame__roll--strike]="(frame() | rollDisplay:2) === 'X'"
+        [class.frame__roll--spare]="(frame() | rollDisplay:2) === '/'">
+        {{ frame() | rollDisplay:2 }}
+      </span>
+    } @else {
+      <span class="frame__roll"
+        [class.frame__roll--strike]="frame().isStrike">
+        {{ frame() | rollDisplay:0 }}
+      </span>
+      @if (!frame().isStrike) {
+        <span class="frame__roll"
+          [class.frame__roll--spare]="frame().isSpare">
+          {{ frame() | rollDisplay:1 }}
+        </span>
+      }
+    }
+  </div>
+
+  <div class="frame__score">
+    {{ frame().cumulativeScore ?? '—' }}
+  </div>
+</div>
