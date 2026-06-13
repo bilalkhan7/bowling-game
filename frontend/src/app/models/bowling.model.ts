@@ -17,4 +17,12 @@ export interface GameState {
   pinsRemaining: number;
 }
 
+export interface ScoreResponse {
+  totalScore: number;
+  currentFrame: number;
+  pinsRemaining: number;
+  gameOver: boolean;
+  frames: Frame[];
+}
+
 export type RollDisplay = 'X' | '/' | '-' | string;
