@@ -1,59 +1,96 @@
-# BowlingGame
+# Bowling Score Calculator
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.13.
+A fullstack bowling score calculator — Angular 21 frontend, Spring Boot 4 backend.
 
-## Development server
+---
 
-To start a local development server, run:
+## Stack
 
+- **Frontend:** Angular 21, TypeScript, SCSS, Vitest
+- **Backend:** Spring Boot 4, Java 25, Gradle, JUnit 5
+
+---
+
+## Getting Started
+
+**Backend**
 ```bash
+cd backend
+./gradlew bootRun
+```
+Runs on `http://localhost:8080`
+
+**Frontend**
+```bash
+cd frontend
+npm install
 ng serve
 ```
+Runs on `http://localhost:4200`
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+**Tests**
 ```bash
-ng generate component component-name
+cd frontend && ng test --watch=false
+cd backend && ./gradlew test
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
+## Project Structure
+
+```
+bowling-game/
+├── frontend/
+│   └── src/app/
+│       ├── models/       # Domain types
+│       ├── services/     # API integration + game state
+│       ├── pipes/        # RollDisplayPipe (X, /, –)
+│       └── components/
+│           ├── bowling-game/   # Game orchestrator
+│           ├── frame/          # Single frame display
+│           └── roll-input/     # Pin selection
+└── backend/
+    └── src/main/java/com/europace/bowling/
+        ├── controller/   # REST endpoint
+        ├── service/      # Scoring engine
+        ├── dto/          # Request/Response types
+        ├── exception/    # Error handling
+        └── config/       # CORS
 ```
 
-## Building
+---
 
-To build the project run:
+## API
 
-```bash
-ng build
+`POST /api/games/score`
+
+```json
+// Request
+{ "rolls": [1,4,4,5,6,4,5,5,10,0,1,7,3,6,4,10,2,8,6] }
+
+// Response
+{ "totalScore": 133, "currentFrame": 9, "pinsRemaining": 0, "gameOver": true, "frames": [...] }
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## Architecture Decisions
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+**Flat rolls array** — bonus rules cross frame boundaries, so a flat array is the natural fit for the algorithm on both sides.
 
-```bash
-ng test
-```
+**Optimistic updates** — roll is applied locally the moment the player clicks, backend confirms in the background. On error, state rolls back with a dismissible message.
 
-## Running end-to-end tests
+**Signals + zoneless** — no Zone.js, no NgRx at this scope. Signals cover everything without the overhead.
 
-For end-to-end (e2e) testing, run:
+**RxJS for HTTP, Signals for state** — HttpClient stays Observable-based, local state stays in Signals. They meet at `.subscribe()` in the service.
 
-```bash
-ng e2e
-```
+**Backend as source of truth** — Java engine handles scoring authoritatively. The local Angular engine exists purely for the optimistic display.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## Next Steps
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **Auth** — Spring Security + JWT, user accounts, game history per player
+- **Persistence** — PostgreSQL via Spring Data JPA, game history endpoint
+- **E2E** — Playwright tests covering full game flows
+- **Deployment** — Docker + AWS ECS backend, S3/CloudFront frontend
